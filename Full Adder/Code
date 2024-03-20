@@ -1,1 +1,32 @@
+Code:-
+module FA(so,co,a,b,c);
+//Gate level code
+input a,b,c;
+output so,co;
+wire p,q,r;
+xor w(p,a,b);
+and l(r,a,b);
+xor z(so,p,c);
+and y(q,p,c);
+or m(co,q,r);
+endmodule
+
+
+
+Test Bench:-
+module FA_TA();
+reg a,b,c;
+wire so,co;
+FA aa(so,co,a,b,c);
+initial begin
+a=1'b0;
+b=1'b0;
+c=1'b0;
+end
+always #2 a=a+1'b1;
+always #3 b=b+1'b1;
+always #4 c=c+1'b1;
+initial $monitor($time,"so=%b,co=%b",so,co);
+initial #50 $finish;
+endmodule
 
