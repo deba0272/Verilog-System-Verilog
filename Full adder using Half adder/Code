@@ -1,0 +1,42 @@
+Code:-
+module FA_FA(so,co,a,b,cin);
+//Data Flow code
+input [3:0]a,b;
+input cin;
+output [3:0]so;
+output co;
+wire [2:0]c;
+FA FA0(so[0],c[0],a[0],b[0],cin);
+FA FA1(so[1],c[1],a[1],b[1],c[0]);
+FA FA2(so[2],c[2],a[2],b[2],c[1]);
+FA FA3(so[3],co,a[3],b[3],c[2]);
+endmodule
+module FA(so,co,a,b,c);
+input a,b,c;
+output so,co;
+wire p,q,r;
+assign p=a^b;
+assign r=a&b;
+assign so=p^c;
+assign q=p&c;
+assign co=q|r;
+endmodule
+
+
+
+
+Test Bench:-
+module FA_FA_TB();
+reg [3:0]a,b;
+reg cin;
+wire [3:0]so;
+wire co;
+FA_FA A1(so,co,a,b,cin);
+initial begin
+a=4'b1101;b=4'b1100;cin=0;
+#50
+a=4'b1001;b=4'b1011;cin=0;
+#50
+#50;
+end
+endmodule
