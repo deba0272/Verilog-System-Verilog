@@ -1,1 +1,31 @@
+Code:-
+module HY(out,cin,s);
+//Behavioral code
+input [1:0]cin;
+input s;
+output reg out;
+always @(*)
+if(s==1'b0)
+out=cin[0];
+else
+out=cin[1];
+endmodule
+
+
+Test Bench:-
+module MY_TB;
+reg [1:0]cin;
+reg s;
+wire out;
+HY K(.out(out),.cin(cin),.s(s));
+initial begin
+cin=2'b00;
+s=0;
+#50
+#50;
+end
+always #2 s=s+1;
+always #1 cin=cin+1;
+initial #20 $finish;
+endmodule
 
