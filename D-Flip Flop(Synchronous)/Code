@@ -1,0 +1,39 @@
+Code:-
+module D_RE_SR(D,clk,sync_reset,Q);
+input D;
+input clk;
+input sync_reset;
+output reg Q;
+always @(posedge clk)
+begin
+if(sync_reset==1'b1)
+Q<=1'b0;
+else
+Q<=D;
+end
+endmodule
+
+
+Test Bench:-
+module D_RE_SR_TB();
+reg D;
+reg clk;
+reg sync_reset;
+wire Q;
+D_RE_SR TE(D,clk,sync_reset,Q);
+initial begin
+clk=0;
+forever #10 clk=~clk;
+end
+initial begin 
+sync_reset=1;
+D<=0;
+#100;
+sync_reset=0;
+D<=1;
+#100;
+D<=0;
+#100;
+D<=1;
+end
+endmodule
