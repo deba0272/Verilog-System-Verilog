@@ -1,0 +1,35 @@
+Code:
+module DEC(O0,O1,O2,O3,O4,O5,O6,O7,I0,I1,I3);
+input I0,I1,I3;
+output O0,O1,O2,O3,O4,O5,O6,O7;
+wire p;
+assign p=~I3;
+Dec a1(O0,O1,O2,O3,I0,I1,I3);
+Dec a2(O4,O5,O6,O7,I0,I1,p);
+endmodule
+module Dec(O0,O1,O2,O3,I0,I1,EN);
+input I0,I1,EN;
+output O0,O1,O2,O3;
+assign O0=~I0&~I1&EN;
+assign O1=~I0&I1&EN;
+assign O2=I0&~I1&EN;
+assign O3=I0&I1&EN;
+endmodule
+
+Test Bench:
+module DEC_TB();
+reg I0,I1,I3;
+wire O0,O1,O2,O3,O4,O5,O6,O7;
+DEC AA(O0,O1,O2,O3,O4,O5,O6,O7,I0,I1,I3);
+initial begin
+I0=0;I1=0;I3=0;#50
+I0=0;I1=1;I3=0;#50
+I0=1;I1=0;I3=0;#50
+I0=1;I1=1;I3=0;#50
+I0=0;I1=0;I3=1;#50
+I0=0;I1=1;I3=1;#50
+I0=1;I1=0;I3=1;#50
+I0=1;I1=1;I3=1;#50
+#50;
+end
+endmodule
