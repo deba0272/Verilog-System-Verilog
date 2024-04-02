@@ -1,0 +1,22 @@
+Code:
+module COM(g,l,s,a,b);
+input a,b;
+output g,l,s;
+assign g=a&~b;
+assign l=~a&~b|a&b;
+assign s=~a&b;
+endmodule
+
+Test Bench:
+module COM_TB();
+reg a,b;
+wire g,l,s;
+COM CA(g,l,s,a,b);
+initial begin
+a=0;b=0;#50
+a=0;b=1;#40
+a=1;b=0;#30
+a=1;b=1;#10
+#50;
+end
+endmodule
