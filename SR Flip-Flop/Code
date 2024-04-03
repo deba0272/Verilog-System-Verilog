@@ -1,0 +1,43 @@
+Code:
+//using bhevioral code for sequential circuits
+module SRL(s,r,clk,q,qb);
+input s,r,clk;
+output reg q,qb;
+always@(posedge clk)
+begin
+if(s==1)
+begin
+q<=1;
+qb<=0;
+end
+else if(r==1)
+begin
+q<=0;
+qb<=1;
+end
+else if(s==0 & r==0)
+begin
+q<=q;
+qb<=qb;
+end
+end
+endmodule
+
+
+
+Test Bench:
+module SRL_TB();
+reg s,r,clk;
+wire q,qb;
+SRL AB(.q(q),.qb(qb),.s(s),.r(r),.clk(clk));
+initial begin
+clk=0;
+forever #10 clk=~clk;
+end
+initial begin
+s=1;r=0;
+#100;s=0;r=1;
+#100;s=0;r=0;
+#100;s=1;r=1;
+end
+endmodule
