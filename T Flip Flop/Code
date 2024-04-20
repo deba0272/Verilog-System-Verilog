@@ -1,0 +1,41 @@
+Code:-
+module tflip(q,qbar,t,clk,rst);
+input t,clk,rst;
+output reg q,qbar;
+always @(posedge clk)
+begin
+if(rst==1'b1)
+begin
+q<=1'b0;
+qbar<=1'b1;
+end 
+else
+if(t==1'b0)
+begin
+q<=q;
+q<=qbar;
+end
+else
+begin
+q<=qbar;
+qbar<=q;
+end
+end
+endmodule
+
+
+Test Bench:-
+module tflip_TB();
+reg t,clk,rst;
+wire q,qbar;
+tflip AA(.q(q),.qbar(qbar),.t(t),.clk(clk),.rst(rst));
+initial begin
+t=0;
+clk=0;
+rst=1;
+end
+always #1 clk=~clk;
+always #2 t=~t;
+initial #10 rst=1'b0;
+initial #100 $finish;
+endmodule
