@@ -1,0 +1,14 @@
+Code:
+module PRAC(q,rst,clk);
+input clk,rst;
+output reg [2:0]q;
+always@(negedge rst or posedge clk)
+begin
+if(!rst)
+q<=3'b011;
+else
+q<=q-001;
+end
+endmodule
+
+Here Force Clock is used for simulation.
