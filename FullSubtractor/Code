@@ -1,0 +1,31 @@
+Code:
+module SUB(diff,bout,a,b,bin);
+input a,b,bin;
+output reg diff,bout;
+always@(*)
+begin
+diff=a^b^bin;
+bout=(~a&b)|(~a&bin)|(b&bin);
+end
+endmodule
+
+Testbench:
+
+module SUB_TB();
+reg a,b,bin;
+wire diff,bout;
+SUB uut(.diff(diff),.bout(bout),.a(a),.b(b),.bin(bin));
+initial 
+begin
+$monitor($time,"diff=%b,bout=%b,a=%b,b=%b,bin=%b",diff,bout,a,b,bin);
+#5a=0;b=0;bin=0;
+#5a=0;b=0;bin=1;
+#5a=0;b=1;bin=0;
+#5a=0;b=1;bin=1;
+#5a=1;b=0;bin=0;
+#5a=1;b=0;bin=1;
+#5a=1;b=1;bin=0;
+#5a=1;b=1;bin=1;
+#5$finish;
+end
+endmodule
