@@ -1,0 +1,51 @@
+Code:
+module bas(sum,product,a,b,c,d);
+parameter size_adder=0;
+parameter size_product=0;
+input [size_adder-1:0]a,b;
+input [size_product-1:0]c,d;
+output [size_adder:0]sum;
+output [size_product*2-1:0]product;
+wire [size_adder:0]s;
+wire [size_product*2-1:0]p;
+assign s=a+b;
+assign p=c*d;
+assign sum=s;
+assign product=p;
+endmodule
+
+//Here using #
+Testbench:
+module bas_TB();
+reg [7:0]a,b;
+reg [5:0]c,d;
+wire [8:0]sum;
+wire [11:0]product;
+bas #(8,6) uut(.sum(sum),.product(product),.a(a),.b(b),.c(c),.d(d));//instantiation
+initial begin
+a=100;b=45;c=10;d=50;#100;
+$stop;
+a=255;b=255;c=20;d=60;#100;
+a=121;b=13;c=30;d=10;#100;
+$finish;
+end
+endmodule
+
+//Here using defparam keyword
+Testbench:
+module bas_TB();
+reg [7:0]a,b;
+reg [5:0]c,d;
+wire [8:0]sum;
+wire [11:0]product;
+bas uut(.sum(sum),.product(product),.a(a),.b(b),.c(c),.d(d));//instantiation
+defparam uut.size_adder=8;
+defparam uut.size_product=6;
+initial begin
+a=100;b=45;c=10;d=50;#100;
+$stop;
+a=255;b=255;c=20;d=60;#100;
+a=121;b=13;c=30;d=10;#100;
+$finish;
+end
+endmodule
