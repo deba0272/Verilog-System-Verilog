@@ -1,0 +1,28 @@
+Code:
+module mux(out,s0,s1,i0,i1,i2,i3);
+input i0,i1,i2,i3,s0,s1;
+output reg out;
+always@(i0,i1,i2,i3,s0,s1)
+begin
+case({s0,s1})//concat
+2'b00:out=i0;
+2'b01:out=i1;
+2'b10:out=i2;
+2'b11:out=i3;
+default:out=1'bx;
+endcase
+end
+endmodule
+
+Testbench:
+module mux_TB();
+reg i0,i1,i2,i3,s0,s1;
+wire out;
+mux uut(.out(out),.s0(s0),.s1(s1),.i0(i0),.i1(i1),.i2(i2),.i3(i3));
+initial begin
+i0=0;i1=1;i2=1;i3=0;s0=0;s1=0;#100;
+i0=0;i1=1;i2=1;i3=0;s0=0;s1=1;#100;
+i0=0;i1=1;i2=1;i3=0;s0=1;s1=0;#100;
+i0=0;i1=1;i2=1;i3=0;s0=1;s1=1;#100;
+end
+endmodule
