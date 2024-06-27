@@ -1,0 +1,48 @@
+Code:
+module PRAC(z,a,b);
+input [2:0]a,b;
+output [5:0]z;
+wire [3:0]s;
+wire [4:0]c;
+wire signed [2:0]p[2:0];
+genvar i;
+for(i=0;i<3;i=i+1)
+begin
+and a0(p[i][0],a[i],b[0]);
+and a1(p[i][1],a[i],b[1]);
+and a2(p[i][2],a[i],b[2]);
+end
+assign z[0]=p[0][0];
+HA h0(z[1],c[0],p[0][1],p[1][0]);
+FA f0(s[0],c[1],p[0][2],p[1][1],c[0]);
+HA h1(z[2],c[2],p[2][0],s[0]);
+HA h2(s[1],c[3],p[1][2],c[1]);
+FA f1(z[3],c[4],p[2][1],c[2],s[1]);
+FA f2(z[4],z[5],c[3],p[2][2],c[4]);
+endmodule
+module HA(s,c,a,b);
+input a,b;
+output s,c;
+assign s=a^b;
+assign c=a&b;
+endmodule
+module FA(s,c,a,b,cin);
+input a,b,cin;
+output s,c;
+assign s=a^b^cin;
+assign c=(a&b)|(b&cin)|(a&cin);
+endmodule
+
+
+Testbench:
+module PRAC_TB();
+reg [2:0]a,b;
+wire [5:0]z;
+PRAC AA(z,a,b);
+initial begin
+a=1;b=0;#100;
+a=7;b=5;#100;
+a=8;b=9;#100;
+a=3'hf;b=3'hf;//3bit
+end
+endmodule
