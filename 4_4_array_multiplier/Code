@@ -1,0 +1,54 @@
+Code:
+module PRAC(a,b,z);
+input [3:0]a,b;
+output [7:0]z;
+wire signed[3:0]p[3:0];
+wire [10:0]c;
+wire [5:0]s;
+genvar g;
+for(g=0;g<4;g=g+1)
+begin
+and g0(p[g][0],a[g],b[0]);
+and g1(p[g][1],a[g],b[1]);
+and g2(p[g][2],a[g],b[2]);
+and g3(p[g][3],a[g],b[3]);
+end
+assign z[0]=p[0][0];//LSB
+HA h0(p[0][1],p[1][0],z[1],c[0]);
+HA h1(p[1][1],p[2][0],s[0],c[1]);
+HA h2(p[2][1],p[3][0],s[1],c[2]);
+FA f0(p[0][2],c[0],s[0],z[2],c[3]);
+FA f1(p[1][2],c[1],s[1],s[2],c[4]);
+FA f2(p[2][2],c[2],p[3][1],s[3],c[5]);
+FA f3(p[0][3],c[3],s[2],z[3],c[6]);
+FA f4(p[1][3],c[4],s[3],s[4],c[7]);
+FA f5(p[2][3],c[5],p[3][2],s[5],c[8]);
+HA h3(c[6],s[4],z[4],c[9]);
+FA f6(c[9],c[7],s[5],z[5],c[10]);
+FA f7(c[10],c[8],p[3][3],z[6],z[7]);
+endmodule
+module HA(p,q,s,c);
+input p,q;
+output s,c;
+assign s=p^q;
+assign c=p&q;
+endmodule
+module FA(p,q,cin,s,c);
+input p,q,cin;
+output s,c;
+assign s=p^q^cin;
+assign c=(p&q)|(q&cin)|(p&cin);
+endmodule
+
+Testbench:
+module PRAC_TB();
+reg [3:0]a,b;
+wire [7:0]p;
+PRAC AA(a,b,p);
+initial begin
+a=1;b=0;#100;
+a=7;b=5;#100;
+a=8;b=9;#100;
+a=4'hf;b=4'hf;//4bit
+end
+endmodule
