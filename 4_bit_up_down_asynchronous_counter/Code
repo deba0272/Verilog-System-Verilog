@@ -1,0 +1,67 @@
+Code:
+module async_count(q,q_bar,j,k,clk,rst);
+input j,k,clk,rst;
+output reg q;
+output q_bar;
+always@(posedge clk or negedge rst)
+if(!rst)
+q<=0;
+else
+begin
+case({j,k})//concat
+2'b00:q<=q;//there is no chnage:memory state
+2'b01:q<=1'b0;//reset
+2'b10:q<=1'b1;//set
+2'b11:q<=~q;//toggle
+default:q=1'bx;//unknown
+endcase
+end
+assign q_bar=~q;
+endmodule
+module up_down_selector(q,q_bar,up,nextclk);
+input q,q_bar,up;
+output nextclk;
+assign nextclk=up?q_bar:q;
+endmodule
+module PRAC#(parameter size=4)(q,q_bar,j,k,up,clk,rst);
+input j,k,up,clk,rst;
+output [size-1:0] q,q_bar;
+wire [size-1:0] nextclk;//for next clock signal
+genvar i;
+async_count JK0(q[0],q_bar[0],j,k,clk,rst);
+generate
+for(i=1;i<size;i=i+1)
+begin
+up_down_selector FF(q[i-1],q_bar[i-1],up,nextclk[i-1]);
+async_count JKR(q[i],q_bar[i],j,k,nextclk[i-1],rst);
+end
+endgenerate
+endmodule
+
+
+Testbench:
+module PRAC_TB();
+reg j,k,clk,rst,up;
+wire [3:0]q,q_bar;
+PRAC AA(q,q_bar,j,k,up,clk,rst);
+always #5
+clk=~clk;
+initial begin
+clk=0;rst=0;
+up=0;
+rst=1;
+#100;j=1;k=1;
+#100;j=0;k=0;
+#100;j=1;k=0;
+#100;j=0;k=1;
+//#100;rst=0;up=0;
+#100;
+rst=1;up=1;
+#100;j=1;k=1;
+#100;j=0;k=0;
+#100;j=1;k=0;
+#100;j=0;k=1;
+#100;
+$finish;
+end
+endmodule
